@@ -44,7 +44,7 @@ public class FlabbyBird implements GLEventListener {
                 }).start();
             }
         });
-        // Center frame
+        
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         animator.start();
