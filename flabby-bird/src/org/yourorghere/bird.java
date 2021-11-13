@@ -30,7 +30,7 @@ public class bird {
         gl.glEnable(GL.GL_TEXTURE_2D);
         try {
             //load texture 
-            tex = TextureIO.newTexture(new File("D:\\Courese-FeedBack\\CPCS-391\\project\\flappy-bird\\flabby-bird\\bird.png"), true);
+            tex = TextureIO.newTexture(new File("D:\\pc\\Documents\\GitHub\\flappy-bird\\flabby-bird\\bird.png"), true);
             tex.bind();
         } catch (IOException ex) {
             System.err.println(ex);
@@ -43,9 +43,9 @@ public class bird {
         gl.glTexCoord2d(1, 1);
         gl.glVertex2d(0, 0);
         gl.glTexCoord2d(0, 1);
-        gl.glVertex2d(1, 0);
+        gl.glVertex2d(-1, 0);
         gl.glTexCoord2d(0, 0);
-        gl.glVertex2d(1, 1);
+        gl.glVertex2d(-1, 1);
         gl.glTexCoord2d(1, 0);
         gl.glVertex2d(0, 1);
         gl.glEnd();

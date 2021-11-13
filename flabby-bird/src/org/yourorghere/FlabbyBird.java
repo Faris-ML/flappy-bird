@@ -86,6 +86,7 @@ public class FlabbyBird implements GLEventListener {
     }
 
     public void display(GLAutoDrawable drawable) {
+        double falling=0;
         GL gl = drawable.getGL();
 
         // Clear the drawing area
@@ -94,7 +95,8 @@ public class FlabbyBird implements GLEventListener {
         gl.glLoadIdentity(); 
 
         // Move the "drawing cursor" around
-        gl.glTranslatef(-1.5f, 0.5f, -6f);
+        gl.glTranslatef(0.25f, -0.25f, -9f);
+
         bird.draw(gl);
 
         // Drawing Using Triangles
@@ -107,7 +109,7 @@ public class FlabbyBird implements GLEventListener {
         
 
         // Flush all drawing operations to the graphics card
-       
+       gl.glFlush();
     }
 
     public void displayChanged(GLAutoDrawable drawable, boolean modeChanged, boolean deviceChanged) {
