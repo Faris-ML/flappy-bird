@@ -5,6 +5,15 @@
  */
 package org.yourorghere;
 
+import com.sun.opengl.util.Animator;
+import java.awt.Frame;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import javax.media.opengl.GL;
+import javax.media.opengl.GLAutoDrawable;
+import javax.media.opengl.GLCanvas;
+import javax.media.opengl.GLEventListener;
+import javax.media.opengl.glu.GLU;
 /**
  *
  * @author TFgam
