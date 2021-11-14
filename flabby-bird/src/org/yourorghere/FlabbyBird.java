@@ -9,25 +9,34 @@ import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCanvas;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
-
-
+import java.awt.event.KeyListener;
+import java.awt.event.KeyEvent;
+import java.util.EventListener;
 
 /**
  * FlabbyBird.java <BR>
- * author: Brian Paul (converted to Java by Ron Cemer and Sven Goethel) <P>
+ * author: Brian Paul (converted to Java by Ron Cemer and Sven Goethel)
+ * <P>
  *
  * This version is equal to Brian Paul's version 1.2 1999/10/21
  */
-public class FlabbyBird implements GLEventListener {
-     bird bird=new bird();
+public class FlabbyBird implements GLEventListener, KeyListener {
+
+    static float dlt = 0;
+    static float rot=0;
+    static float g=2f;
+
+    bird bird = new bird(0,0,0.5f);
+    //static input listener=new input();
 
     public static void main(String[] args) {
         Frame frame = new Frame("Simple JOGL Application");
         GLCanvas canvas = new GLCanvas();
 
         canvas.addGLEventListener(new FlabbyBird());
+        canvas.addKeyListener(new FlabbyBird());
         frame.add(canvas);
-        frame.setSize(640, 480);
+        frame.setSize(1280, 720);
         final Animator animator = new Animator(canvas);
         frame.addWindowListener(new WindowAdapter() {
 
@@ -45,7 +54,7 @@ public class FlabbyBird implements GLEventListener {
                 }).start();
             }
         });
-        
+
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         animator.start();
@@ -55,9 +64,9 @@ public class FlabbyBird implements GLEventListener {
         // Use debug pipeline
         // drawable.setGL(new DebugGL(drawable.getGL()));
 
-        GL gl= drawable.getGL();
+        GL gl = drawable.getGL();
         System.err.println("INIT GL IS: " + gl.getClass().getName());
-       
+
         bird.init(gl);
 
         // Enable VSync
@@ -73,7 +82,7 @@ public class FlabbyBird implements GLEventListener {
         GLU glu = new GLU();
 
         if (height <= 0) { // avoid a divide by zero error!
-        
+
             height = 1;
         }
         final float h = (float) width / (float) height;
@@ -84,35 +93,55 @@ public class FlabbyBird implements GLEventListener {
         gl.glMatrixMode(GL.GL_MODELVIEW);
         gl.glLoadIdentity();
     }
+    float x = 0;
+    KeyEvent e;
 
     public void display(GLAutoDrawable drawable) {
-        double falling=0;
+        double falling = 0;
         GL gl = drawable.getGL();
 
         // Clear the drawing area
         gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
         // Reset the current matrix to the "identity"
-        gl.glLoadIdentity(); 
-
+        gl.glLoadIdentity();
+        
+        dlt = dlt - 0.03f;
+        if(rot>-90){
+        rot=rot-g;
+        g=g+0.004f;
+        if(g>5){
+        g=5;
+        }
+        }
+        
         // Move the "drawing cursor" around
-        gl.glTranslatef(0.25f, -0.25f, -9f);
+        gl.glTranslatef(0.25f, (-0.25f + dlt), -9f);
+        gl.glRotatef(rot, 0f, 0f, 1f); 
 
         bird.draw(gl);
 
-        // Drawing Using Triangles
-        
-
-        // Move the "drawing cursor" to another position
-        // Draw A Quad
-         // Bottom Left
-        // Done Drawing The Quad
-        
-
-        // Flush all drawing operations to the graphics card
-       gl.glFlush();
+        gl.glFlush();
     }
-
+  
     public void displayChanged(GLAutoDrawable drawable, boolean modeChanged, boolean deviceChanged) {
     }
-}
 
+    @Override
+    public void keyTyped(KeyEvent ke) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void keyPressed(KeyEvent ke) {
+        if (ke.getKeyCode() == KeyEvent.VK_SPACE) {
+            dlt = (float) (dlt + 0.7);
+            rot=g+45;
+            g=2;
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent ke) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+}

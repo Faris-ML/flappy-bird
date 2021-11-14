@@ -20,8 +20,14 @@ import javax.media.opengl.glu.GLU;
  * @author TFgam
  */
 public class bird {
+    float x;
+    float y;
+    float size;
 
-    public bird() {
+    public bird(float x,float y,float size) {
+        this.x=x;
+        this.y=y;
+        this.size=size;        
     }
 
     public void init(GL gl) {
@@ -30,7 +36,7 @@ public class bird {
         gl.glEnable(GL.GL_TEXTURE_2D);
         try {
             //load texture 
-            tex = TextureIO.newTexture(new File("D:\\pc\\Documents\\GitHub\\flappy-bird\\flabby-bird\\bird.png"), true);
+            tex = TextureIO.newTexture(new File("bird.png"), true);
             tex.bind();
         } catch (IOException ex) {
             System.err.println(ex);
@@ -40,14 +46,14 @@ public class bird {
 
     public void draw(GL gl) {
         gl.glBegin(GL.GL_QUADS);
-        gl.glTexCoord2d(1, 1);
-        gl.glVertex2d(0, 0);
-        gl.glTexCoord2d(0, 1);
-        gl.glVertex2d(-1, 0);
-        gl.glTexCoord2d(0, 0);
-        gl.glVertex2d(-1, 1);
         gl.glTexCoord2d(1, 0);
-        gl.glVertex2d(0, 1);
+        gl.glVertex2d(x+size, y+size);
+        gl.glTexCoord2d(0, 0);
+        gl.glVertex2d(x-size, y+size);
+        gl.glTexCoord2d(0, 1);
+        gl.glVertex2d(x-size, y-size);
+        gl.glTexCoord2d(1, 1);
+        gl.glVertex2d(x+size, y-size);
         gl.glEnd();
         gl.glFlush();
     }
