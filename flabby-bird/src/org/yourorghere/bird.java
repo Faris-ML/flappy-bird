@@ -41,19 +41,19 @@ public class bird {
         } catch (IOException ex) {
             System.err.println(ex);
         }
-        System.err.println("INIT GL IS: " + gl.getClass().getName());
     }
 
     public void draw(GL gl) {
+        init(gl);
         gl.glBegin(GL.GL_QUADS);
-        gl.glTexCoord2d(1, 0);
-        gl.glVertex2d(x+size, y+size);
-        gl.glTexCoord2d(0, 0);
-        gl.glVertex2d(x-size, y+size);
-        gl.glTexCoord2d(0, 1);
-        gl.glVertex2d(x-size, y-size);
-        gl.glTexCoord2d(1, 1);
-        gl.glVertex2d(x+size, y-size);
+        gl.glTexCoord2d(1, 0.15);
+        gl.glVertex2d(x+(size/FlabbyBird.h), y+size);
+        gl.glTexCoord2d(0, 0.15);
+        gl.glVertex2d(x-(size/FlabbyBird.h), y+size);
+        gl.glTexCoord2d(0, 0.85);
+        gl.glVertex2d(x-(size/FlabbyBird.h), y-size);
+        gl.glTexCoord2d(1, 0.85);
+        gl.glVertex2d(x+(size/FlabbyBird.h), y-size);
         gl.glEnd();
         gl.glFlush();
     }
