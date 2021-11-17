@@ -9,24 +9,36 @@ import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCanvas;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
-
-
+import java.awt.event.KeyListener;
+import java.awt.event.KeyEvent;
 
 /**
  * FlabbyBird.java <BR>
- * author: Brian Paul (converted to Java by Ron Cemer and Sven Goethel) <P>
+ * author: Brian Paul (converted to Java by Ron Cemer and Sven Goethel)
+ * <P>
  *
  * This version is equal to Brian Paul's version 1.2 1999/10/21
  */
-public class FlabbyBird implements GLEventListener {
+public class FlabbyBird implements GLEventListener, KeyListener {
+
+    static float dlt = 0;
+    static float rot=0;
+    static float g=2f;
+    static int hight=720;
+    static int width=1280;
+    static float h=width/hight;
+
+    bird bird = new bird(0,0,0.07f);
+    //static input listener=new input();
 
     public static void main(String[] args) {
         Frame frame = new Frame("Simple JOGL Application");
         GLCanvas canvas = new GLCanvas();
 
         canvas.addGLEventListener(new FlabbyBird());
+        canvas.addKeyListener(new FlabbyBird());
         frame.add(canvas);
-        frame.setSize(640, 480);
+        frame.setSize(1280, 720);
         final Animator animator = new Animator(canvas);
         frame.addWindowListener(new WindowAdapter() {
 
@@ -44,7 +56,7 @@ public class FlabbyBird implements GLEventListener {
                 }).start();
             }
         });
-        
+
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         animator.start();
@@ -57,11 +69,13 @@ public class FlabbyBird implements GLEventListener {
         GL gl = drawable.getGL();
         System.err.println("INIT GL IS: " + gl.getClass().getName());
 
+       
+
         // Enable VSync
         gl.setSwapInterval(1);
 
         // Setup the drawing area and shading mode
-        gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         gl.glShadeModel(GL.GL_SMOOTH); // try setting this to GL_FLAT and see what happens.
     }
 
@@ -70,57 +84,66 @@ public class FlabbyBird implements GLEventListener {
         GLU glu = new GLU();
 
         if (height <= 0) { // avoid a divide by zero error!
-        
+
             height = 1;
         }
         final float h = (float) width / (float) height;
         gl.glViewport(0, 0, width, height);
         gl.glMatrixMode(GL.GL_PROJECTION);
         gl.glLoadIdentity();
-        glu.gluPerspective(45.0f, h, 1.0, 20.0);
+        glu.gluOrtho2D(-1, 1, -1, 1);
         gl.glMatrixMode(GL.GL_MODELVIEW);
         gl.glLoadIdentity();
     }
+    float x = 0;
+    KeyEvent e;
 
     public void display(GLAutoDrawable drawable) {
+        double falling = 0;
         GL gl = drawable.getGL();
 
         // Clear the drawing area
         gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
         // Reset the current matrix to the "identity"
         gl.glLoadIdentity();
-
+        
+//        dlt = dlt - 0.03f;
+//        if(rot>-90){
+//        rot=rot-g;
+//        g=g+0.004f;
+//        if(g>5){
+//        g=5;
+//        }
+//        }
+        
         // Move the "drawing cursor" around
-        gl.glTranslatef(-1.5f, 0.0f, -6.0f);
+        gl.glTranslatef(0f, dlt, 0f);
+        gl.glRotatef(rot, 0f, 0f, 1f); 
 
-        // Drawing Using Triangles
-        gl.glBegin(GL.GL_TRIANGLES);
-            gl.glColor3f(1.0f, 0.0f, 0.0f);    // Set the current drawing color to red
-            gl.glVertex3f(0.0f, 1.0f, 0.0f);   // Top
-            gl.glColor3f(0.0f, 1.0f, 0.0f);    // Set the current drawing color to green
-            gl.glVertex3f(-1.0f, -1.0f, 0.0f); // Bottom Left
-            gl.glColor3f(0.0f, 0.0f, 1.0f);    // Set the current drawing color to blue
-            gl.glVertex3f(1.0f, -1.0f, 0.0f);  // Bottom Right
-        // Finished Drawing The Triangle
-        gl.glEnd();
+        bird.draw(gl);
 
-        // Move the "drawing cursor" to another position
-        gl.glTranslatef(3.0f, 0.0f, 0.0f);
-        // Draw A Quad
-        gl.glBegin(GL.GL_QUADS);
-            gl.glColor3f(0.5f, 0.5f, 1.0f);    // Set the current drawing color to light blue
-            gl.glVertex3f(-1.0f, 1.0f, 0.0f);  // Top Left
-            gl.glVertex3f(1.0f, 1.0f, 0.0f);   // Top Right
-            gl.glVertex3f(1.0f, -1.0f, 0.0f);  // Bottom Right
-            gl.glVertex3f(-1.0f, -1.0f, 0.0f); // Bottom Left
-        // Done Drawing The Quad
-        gl.glEnd();
-
-        // Flush all drawing operations to the graphics card
         gl.glFlush();
     }
-
+  
     public void displayChanged(GLAutoDrawable drawable, boolean modeChanged, boolean deviceChanged) {
     }
-}
 
+    @Override
+    public void keyTyped(KeyEvent ke) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void keyPressed(KeyEvent ke) {
+        if (ke.getKeyCode() == KeyEvent.VK_SPACE) {
+            dlt = (float) (dlt + 0.7);
+            rot=g+45;
+            g=2;
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent ke) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+}
