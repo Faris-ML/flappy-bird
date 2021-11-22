@@ -25,12 +25,13 @@ public class FlabbyBird implements GLEventListener, KeyListener {
     static float x = 0;
     static float rot = 0;
     static float g = 2f;
-    static int hight = 720;
+    static int height = 720;
     static int width = 1280;
-    static float h = width / hight;
+    static float h = width / height;
 
     bird bird = new bird(0, 0, 0.5f);
     pipe pipe = new pipe(0, 0f, 3f);
+    background bg =new background();
     //static input listener=new input();
 
     public static void main(String[] args) {
@@ -40,7 +41,7 @@ public class FlabbyBird implements GLEventListener, KeyListener {
         canvas.addGLEventListener(new FlabbyBird());
         canvas.addKeyListener(new FlabbyBird());
         frame.add(canvas);
-        frame.setSize(1280, 720);
+        frame.setSize(width, height);
         final Animator animator = new Animator(canvas);
         frame.addWindowListener(new WindowAdapter() {
 
@@ -92,37 +93,36 @@ public class FlabbyBird implements GLEventListener, KeyListener {
         gl.glViewport(0, 0, width, height);
         gl.glMatrixMode(GL.GL_PROJECTION);
         gl.glLoadIdentity();
-        gl.glOrtho(-10, 10, -10*h, 10*h, -1, 1);
+        gl.glOrtho(-10f, 10f, -10f*h, 10f*h, -1f, 1f);
         gl.glMatrixMode(GL.GL_MODELVIEW);
         gl.glLoadIdentity();
     }
 
     public void display(GLAutoDrawable drawable) {
-        double falling = 0;
+        
         GL gl = drawable.getGL();
 
         gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 
-        // Reset the current matrix to the "identity"
+
+        gl.glLoadIdentity();
+        gl.glPushMatrix();       
+        bg.draw(gl);       
+        gl.glPopMatrix(); 
+       
+        
         gl.glLoadIdentity();
         gl.glPushMatrix();
-        // Clear the drawing area
-
-        // Move the "drawing cursor" around
-        g=bird.getG();
-        bird.setG(g);
-        bird.setRot(rot);
+        pipe.draw(gl);
+        gl.glPopMatrix();
+        
+        
+        gl.glLoadIdentity();
+        gl.glPushMatrix();
         //bird.rotate(gl);
         bird.setY(y);
         bird.draw(gl);
         y = bird.getY();
-        gl.glPopMatrix();
-
-        gl.glLoadIdentity();
-        gl.glPushMatrix();
-
-        //gl.glTranslatef(x, 0, 0f);
-        pipe.draw(gl);
         gl.glPopMatrix();
 
     }

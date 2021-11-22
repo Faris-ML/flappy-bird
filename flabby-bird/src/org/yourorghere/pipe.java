@@ -53,9 +53,9 @@ public class pipe {
         gl.glTexCoord2d(0, 0);
         gl.glVertex2d(x+1, y);
         gl.glTexCoord2d(0, 1);
-        gl.glVertex2d(x+1, -10);
+        gl.glVertex2d(x+1, -10f*FlabbyBird.h);
         gl.glTexCoord2d(1, 1);
-        gl.glVertex2d(x, -10);
+        gl.glVertex2d(x, -10f*FlabbyBird.h);
         gl.glEnd();
         gl.glFlush();
       
@@ -65,9 +65,9 @@ public class pipe {
         gl.glTexCoord2d(1, 0);
         gl.glVertex2d(x+1, y+gap);
         gl.glTexCoord2d(1, 1);
-        gl.glVertex2d(x+1, 10);
+        gl.glVertex2d(x+1, 10f*FlabbyBird.h);
         gl.glTexCoord2d(0, 1);
-        gl.glVertex2d(x, 10);
+        gl.glVertex2d(x, 10f*FlabbyBird.h);
         gl.glEnd();
         gl.glFlush();
         

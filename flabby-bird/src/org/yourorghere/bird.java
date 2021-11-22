@@ -28,8 +28,6 @@ public class bird {
     float x;
     float y;
     float size;
-    float rot=0;
-    float g=0;
 
     public bird(float x,float y,float size) {
         this.x=x;
@@ -67,7 +65,7 @@ public class bird {
     }
 
     public void rotate(GL gl){
-        gl.glRotatef(this.rot, 0f, 0f, 1f);
+        gl.glRotatef(rot, 0f, 0f, 1f);
 //        if (this.rot > -90) {
 //            this.rot = this.rot - this.g;
 //            this.g = this.g + 0.004f;
@@ -82,20 +80,16 @@ public class bird {
         return rot;
     }
 
-    public void setRot(float rot) {
-        this.rot = rot;
-    }
+    
 
     public float getG() {
         return g;
     }
 
-    public void setG(float g) {
-        this.g = g;
-    }
+   
     
     public void draw(GL gl) {
-        if (this.y <= -10*9/16| this.y>=10*9/16) {
+        if (this.y < -10f*FlabbyBird.h| this.y>10f*FlabbyBird.h) {
             //die
 
         } else {
