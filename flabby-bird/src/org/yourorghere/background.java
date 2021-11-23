@@ -41,13 +41,13 @@ public class background {
         
         gl.glBegin(GL.GL_QUADS);
         gl.glTexCoord2d(1, 1);
-        gl.glVertex2d(10,-10f*FlabbyBird.h);
+        gl.glVertex2d(1,-1f*FlabbyBird.h);
         gl.glTexCoord2d(0, 1);
-        gl.glVertex2d(-10, -10f*FlabbyBird.h);
+        gl.glVertex2d(-1, -1f*FlabbyBird.h);
         gl.glTexCoord2d(0, 0);
-        gl.glVertex2d(-10, 10f*FlabbyBird.h);
+        gl.glVertex2d(-1, 1f*FlabbyBird.h);
         gl.glTexCoord2d(1, 0);
-        gl.glVertex2d(10, 10f*FlabbyBird.h);
+        gl.glVertex2d(1, 1f*FlabbyBird.h);
         gl.glEnd();
 
         // Flush all drawing operations to the graphics card

@@ -28,6 +28,7 @@ public class bird {
     float x;
     float y;
     float size;
+    float delta=0;
 
     public bird(float x,float y,float size) {
         this.x=x;
@@ -66,13 +67,13 @@ public class bird {
 
     public void rotate(GL gl){
         gl.glRotatef(rot, 0f, 0f, 1f);
-//        if (this.rot > -90) {
-//            this.rot = this.rot - this.g;
-//            this.g = this.g + 0.004f;
-//            if (this.g > 5) {
-//                this.g = 5;
-//            }
-//        }
+        if (rot > -70) {
+            rot = rot - g;
+            g = g + 0.004f;
+            if (g > 5) {
+                g = 5;
+            }
+        }
     
     }
 
@@ -80,8 +81,15 @@ public class bird {
         return rot;
     }
 
-    
+    public float getDelta() {
+        return delta;
+    }
 
+    public void setDelta(float delta) {
+        this.delta = delta;
+    }
+
+    
     public float getG() {
         return g;
     }
@@ -89,14 +97,15 @@ public class bird {
    
     
     public void draw(GL gl) {
-        if (this.y < -10f*FlabbyBird.h| this.y>10f*FlabbyBird.h) {
+        if (this.delta < -10f*FlabbyBird.h| this.delta>10f*FlabbyBird.h) {
             //die
 
         } else {
             // going down
-            this.y = this.y - 0.02f;
+            this.delta = this.delta - 0.002f;
+            gl.glTranslatef(0f, delta, 0f);
         }
-        
+        rotate(gl);
         init(gl);
         gl.glBegin(GL.GL_QUADS);
         gl.glTexCoord2d(1, 0.15);

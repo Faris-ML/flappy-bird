@@ -21,7 +21,7 @@ import java.awt.event.KeyEvent;
  */
 public class FlabbyBird implements GLEventListener, KeyListener {
 
-    static float y = 0;
+    static float delta = 0;
     static float x = 0;
     static float rot = 0;
     static float g = 2f;
@@ -29,9 +29,9 @@ public class FlabbyBird implements GLEventListener, KeyListener {
     static int width = 1280;
     static float h = width / height;
 
-    bird bird = new bird(0, 0, 0.5f);
-    pipe pipe = new pipe(0, 0f, 3f);
-    background bg =new background();
+    bird bird = new bird(0, 0, 0.03f);
+    pipe pipe = new pipe(-1f, -0.1f, 0.3f);
+    background bg = new background();
     //static input listener=new input();
 
     public static void main(String[] args) {
@@ -71,7 +71,7 @@ public class FlabbyBird implements GLEventListener, KeyListener {
         // drawable.setGL(new DebugGL(drawable.getGL()));
 
         GL gl = drawable.getGL();
-        System.err.println("INIT GL IS: " + gl.getClass().getName());
+        //System.err.println("INIT GL IS: " + gl.getClass().getName());
 
         // Enable VSync
         gl.setSwapInterval(1);
@@ -93,36 +93,32 @@ public class FlabbyBird implements GLEventListener, KeyListener {
         gl.glViewport(0, 0, width, height);
         gl.glMatrixMode(GL.GL_PROJECTION);
         gl.glLoadIdentity();
-        gl.glOrtho(-10f, 10f, -10f*h, 10f*h, -1f, 1f);
+        gl.glOrtho(-1f, 1f, -1f * h, 1f * h, -1f, 1f);
         gl.glMatrixMode(GL.GL_MODELVIEW);
         gl.glLoadIdentity();
     }
 
     public void display(GLAutoDrawable drawable) {
-        
+
         GL gl = drawable.getGL();
 
         gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 
-
         gl.glLoadIdentity();
-        gl.glPushMatrix();       
-        bg.draw(gl);       
-        gl.glPopMatrix(); 
-       
-        
+        gl.glPushMatrix();
+        bg.draw(gl);
+        gl.glPopMatrix();
+
         gl.glLoadIdentity();
         gl.glPushMatrix();
         pipe.draw(gl);
         gl.glPopMatrix();
-        
-        
+
         gl.glLoadIdentity();
         gl.glPushMatrix();
-        //bird.rotate(gl);
-        bird.setY(y);
+        bird.setDelta(delta);
         bird.draw(gl);
-        y = bird.getY();
+        delta = bird.getDelta();
         gl.glPopMatrix();
 
     }
@@ -131,22 +127,20 @@ public class FlabbyBird implements GLEventListener, KeyListener {
     }
 
     @Override
-    public void keyTyped(KeyEvent ke) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public void keyPressed(KeyEvent ke) {
         if (ke.getKeyCode() == KeyEvent.VK_SPACE) {
-            System.out.println(rot+" - "+g);
-            y = y + 0.5f;
+            System.out.println(rot + " - " + g);
+            delta = delta + 0.08f;
             rot = g + 45;
             g = 2;
         }
     }
 
     @Override
+    public void keyTyped(KeyEvent ke) {
+    }
+
+    @Override
     public void keyReleased(KeyEvent ke) {
-        // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

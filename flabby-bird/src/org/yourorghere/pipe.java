@@ -41,21 +41,21 @@ public class pipe {
     }
     
     public void draw(GL gl) {
-        if (this.x <= -10) {
-            this.x = 10;
+        if (this.x <= -1) {
+            this.x = 1;
         }
-        this.x = this.x - 0.03f;
+        this.x = this.x - 0.003f;
         
         init(gl);
         gl.glBegin(GL.GL_QUADS);
         gl.glTexCoord2d(1, 0);
         gl.glVertex2d(x, y);
         gl.glTexCoord2d(0, 0);
-        gl.glVertex2d(x+1, y);
+        gl.glVertex2d(x+0.1, y);
         gl.glTexCoord2d(0, 1);
-        gl.glVertex2d(x+1, -10f*FlabbyBird.h);
+        gl.glVertex2d(x+0.1, -1f*FlabbyBird.h);
         gl.glTexCoord2d(1, 1);
-        gl.glVertex2d(x, -10f*FlabbyBird.h);
+        gl.glVertex2d(x, -1f*FlabbyBird.h);
         gl.glEnd();
         gl.glFlush();
       
@@ -63,11 +63,11 @@ public class pipe {
         gl.glTexCoord2d(0, 0);
         gl.glVertex2d(x, y+gap);
         gl.glTexCoord2d(1, 0);
-        gl.glVertex2d(x+1, y+gap);
+        gl.glVertex2d(x+0.1, y+gap);
         gl.glTexCoord2d(1, 1);
-        gl.glVertex2d(x+1, 10f*FlabbyBird.h);
+        gl.glVertex2d(x+0.1, 1f*FlabbyBird.h);
         gl.glTexCoord2d(0, 1);
-        gl.glVertex2d(x, 10f*FlabbyBird.h);
+        gl.glVertex2d(x, 1f*FlabbyBird.h);
         gl.glEnd();
         gl.glFlush();
         
