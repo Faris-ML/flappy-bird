@@ -1,16 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.yourorghere;
-import com.sun.opengl.util.GLUT;
 import com.sun.opengl.util.texture.Texture;
 import com.sun.opengl.util.texture.TextureIO;
 import java.io.File;
 import java.io.IOException;
 import javax.media.opengl.GL;
-import javax.media.opengl.GLAutoDrawable;
+
 
 
 public class background {
@@ -32,13 +26,11 @@ public class background {
         } catch (IOException ex) {
             System.err.println(ex);
         }
-        System.err.println("INIT GL IS: " + gl.getClass().getName());
+        
     }
     public void draw(GL gl) {
-        // Clear the drawing area
+    
         init(gl);
-        // Move the "drawing cursor" around
-        
         gl.glBegin(GL.GL_QUADS);
         gl.glTexCoord2d(1, 1);
         gl.glVertex2d(1,-1f*FlabbyBird.h);
@@ -49,8 +41,6 @@ public class background {
         gl.glTexCoord2d(1, 0);
         gl.glVertex2d(1, 1f*FlabbyBird.h);
         gl.glEnd();
-
-        // Flush all drawing operations to the graphics card
         gl.glFlush();
 
     }

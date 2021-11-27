@@ -1,19 +1,10 @@
 package org.yourorghere;
-
-import com.sun.opengl.util.GLUT;
 import com.sun.opengl.util.texture.Texture;
 import com.sun.opengl.util.texture.TextureIO;
 import java.io.File;
 import java.io.IOException;
-import com.sun.opengl.util.Animator;
-import java.awt.Frame;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import javax.media.opengl.GL;
-import javax.media.opengl.GLAutoDrawable;
-import javax.media.opengl.GLCanvas;
-import javax.media.opengl.GLEventListener;
-import javax.media.opengl.glu.GLU;
+
 
 public class pipe {
 
@@ -41,11 +32,13 @@ public class pipe {
     }
     
     public void draw(GL gl) {
-        if (this.x <= -1) {
+        if (this.x <= -1) {//if the pipe reach the most left go back to right
             this.x = 1;
         }
+        if(!FlabbyBird.bird.die){ //keep moving from left to right
         this.x = this.x - 0.003f;
-        
+        }
+        //draw the bottom pipe
         init(gl);
         gl.glBegin(GL.GL_QUADS);
         gl.glTexCoord2d(1, 0);
@@ -53,21 +46,22 @@ public class pipe {
         gl.glTexCoord2d(0, 0);
         gl.glVertex2d(x+0.1, y);
         gl.glTexCoord2d(0, 1);
-        gl.glVertex2d(x+0.1, -1f*FlabbyBird.h);
+        gl.glVertex2d(x+0.1, -1f*FlabbyBird.h+0.45f);
         gl.glTexCoord2d(1, 1);
-        gl.glVertex2d(x, -1f*FlabbyBird.h);
+        gl.glVertex2d(x, -1f*FlabbyBird.h+0.45f);
         gl.glEnd();
         gl.glFlush();
       
+        //draw the top pipe
         gl.glBegin(GL.GL_QUADS);
         gl.glTexCoord2d(0, 0);
         gl.glVertex2d(x, y+gap);
         gl.glTexCoord2d(1, 0);
         gl.glVertex2d(x+0.1, y+gap);
         gl.glTexCoord2d(1, 1);
-        gl.glVertex2d(x+0.1, 1f*FlabbyBird.h);
+        gl.glVertex2d(x+0.1, 1f*FlabbyBird.h-0.45f);
         gl.glTexCoord2d(0, 1);
-        gl.glVertex2d(x, 1f*FlabbyBird.h);
+        gl.glVertex2d(x, 1f*FlabbyBird.h-0.45f);
         gl.glEnd();
         gl.glFlush();
         

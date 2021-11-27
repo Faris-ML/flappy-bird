@@ -1,22 +1,10 @@
 package org.yourorghere;
 
-
-import com.sun.opengl.util.GLUT;
 import com.sun.opengl.util.texture.Texture;
 import com.sun.opengl.util.texture.TextureIO;
 import java.io.File;
 import java.io.IOException;
-import com.sun.opengl.util.Animator;
-import java.awt.Frame;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import javax.media.opengl.GL;
-import javax.media.opengl.GLAutoDrawable;
-import javax.media.opengl.GLCanvas;
-import javax.media.opengl.GLEventListener;
-import javax.media.opengl.glu.GLU;
 import static org.yourorghere.FlabbyBird.g;
 import static org.yourorghere.FlabbyBird.rot;
 
@@ -25,15 +13,17 @@ import static org.yourorghere.FlabbyBird.rot;
  * @author TFgam
  */
 public class bird {
+
     float x;
     float y;
     float size;
-    float delta=0;
+    float delta = 0;
+    boolean die = false;
 
-    public bird(float x,float y,float size) {
-        this.x=x;
-        this.y=y;
-        this.size=size;        
+    public bird(float x, float y, float size) {
+        this.x = x;
+        this.y = y;
+        this.size = size;
     }
 
     public void init(GL gl) {
@@ -65,16 +55,16 @@ public class bird {
         this.y = y;
     }
 
-    public void rotate(GL gl){
+    public void rotate(GL gl) {//rotate function of the bird
         gl.glRotatef(rot, 0f, 0f, 1f);
-        if (rot > -70) {
+        if (rot > -70) {//rotate for falling
             rot = rot - g;
             g = g + 0.004f;
             if (g > 5) {
                 g = 5;
             }
         }
-    
+
     }
 
     public float getRot() {
@@ -89,33 +79,37 @@ public class bird {
         this.delta = delta;
     }
 
-    
     public float getG() {
         return g;
     }
 
-   
-    
     public void draw(GL gl) {
-        if (this.delta < -10f*FlabbyBird.h| this.delta>10f*FlabbyBird.h) {
-            //die
+        if (this.delta <= -FlabbyBird.h + 0.45f | this.delta >= FlabbyBird.h - 0.45f) {
+            //die if the bird coloied with the top or the bottom of the screan
+            this.die = true;
+        }
 
-        } else {
-            // going down
+        if (this.die) {// if the bird die fall faster
+            if (this.delta <= -1) {//dont continue falling to infite
+                this.delta = -1;
+            }
+            gl.glTranslatef(0f, delta, 0f);
+            this.delta = this.delta - 0.02f;
+        } else {// keep falling 
             this.delta = this.delta - 0.002f;
             gl.glTranslatef(0f, delta, 0f);
         }
-        rotate(gl);
+        rotate(gl);//rotate the bird
         init(gl);
         gl.glBegin(GL.GL_QUADS);
         gl.glTexCoord2d(1, 0.15);
-        gl.glVertex2d(x+size, y+size);
+        gl.glVertex2d(x + size, y + size);
         gl.glTexCoord2d(0, 0.15);
-        gl.glVertex2d(x-size, y+size);
+        gl.glVertex2d(x - size, y + size);
         gl.glTexCoord2d(0, 0.85);
-        gl.glVertex2d(x-size, y-size);
+        gl.glVertex2d(x - size, y - size);
         gl.glTexCoord2d(1, 0.85);
-        gl.glVertex2d(x+size, y-size);
+        gl.glVertex2d(x + size, y - size);
         gl.glEnd();
         gl.glFlush();
     }
