@@ -30,7 +30,7 @@ public class FlabbyBird implements GLEventListener, KeyListener {
     static float h = width / height;
 
     static bird bird = new bird(0, 0, 0.03f);
-    static pipe pipe = new pipe(-0.04f, -0.1f, 0.3f);
+    static pipe pipe = new pipe(1f, 0.075f, 0.3f);
     static background bg = new background();
     //static input listener=new input();
 

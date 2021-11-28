@@ -99,8 +99,11 @@ public class bird {
             this.delta = this.delta - 0.002f;
             gl.glTranslatef(0f, delta, 0f);
         }
+        
         rotate(gl);//rotate the bird
+        
         init(gl);
+        
         gl.glBegin(GL.GL_QUADS);
         gl.glTexCoord2d(1, 0.15);
         gl.glVertex2d(x + size, y + size);

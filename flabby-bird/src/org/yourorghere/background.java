@@ -8,8 +8,9 @@ import javax.media.opengl.GL;
 
 
 public class background {
-    final float  x=0;
-    final float y=0;
+    float  x=3;
+    float y=0;
+    float delta=0;
 
     public background() {
         
@@ -29,8 +30,14 @@ public class background {
         
     }
     public void draw(GL gl) {
+        if(this.delta<=-2){
+        this.delta=0;
+        }
+        this.delta=this.delta-0.001f;
     
         init(gl);
+        gl.glTranslatef(delta, 0f, 0f);
+        
         gl.glBegin(GL.GL_QUADS);
         gl.glTexCoord2d(1, 1);
         gl.glVertex2d(1,-1f*FlabbyBird.h);
@@ -40,6 +47,20 @@ public class background {
         gl.glVertex2d(-1, 1f*FlabbyBird.h);
         gl.glTexCoord2d(1, 0);
         gl.glVertex2d(1, 1f*FlabbyBird.h);
+        gl.glEnd();
+        gl.glFlush();
+        
+        
+        
+        gl.glBegin(GL.GL_QUADS);
+        gl.glTexCoord2d(1, 1);
+        gl.glVertex2d(3,-1f*FlabbyBird.h);
+        gl.glTexCoord2d(0, 1);
+        gl.glVertex2d(1, -1f*FlabbyBird.h);
+        gl.glTexCoord2d(0, 0);
+        gl.glVertex2d(1, 1f*FlabbyBird.h);
+        gl.glTexCoord2d(1, 0);
+        gl.glVertex2d(3, 1f*FlabbyBird.h);
         gl.glEnd();
         gl.glFlush();
 
