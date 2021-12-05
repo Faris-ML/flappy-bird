@@ -8,17 +8,9 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCanvas;
 import javax.media.opengl.GLEventListener;
-import javax.media.opengl.glu.GLU;
 import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
 
-/**
- * FlabbyBird.java <BR>
- * author: Brian Paul (converted to Java by Ron Cemer and Sven Goethel)
- * <P>
- *
- * This version is equal to Brian Paul's version 1.2 1999/10/21
- */
 public class FlabbyBird implements GLEventListener, KeyListener {
 
     static float delta = 0;
@@ -28,12 +20,16 @@ public class FlabbyBird implements GLEventListener, KeyListener {
     static int height = 720;
     static int width = 1280;
     static float h = width / height;
-
+    static float a = (2f + 0.15f) / 4f;
     static bird bird = new bird(0, 0, 0.03f);
-    static pipe pipe = new pipe(1f, 0.075f, 0.3f);
+    static pipe pipe1 = new pipe(1f + (0f * a), 0.3f);
+    static pipe pipe2 = new pipe(1f + (1f * a), 0.3f);
+    static pipe pipe3 = new pipe(1f + (2f * a), 0.3f);
+    static pipe pipe4 = new pipe(1f + (3f * a), 0.3f);
+    static pipe pipe[] = {pipe1, pipe2, pipe3, pipe4};
     static background bg = new background();
-    //static input listener=new input();
 
+    //static input listener=new input();
     public static void main(String[] args) {
         Frame frame = new Frame("Simple JOGL Application");
         GLCanvas canvas = new GLCanvas();
@@ -41,7 +37,7 @@ public class FlabbyBird implements GLEventListener, KeyListener {
         canvas.addGLEventListener(new FlabbyBird());
         canvas.addKeyListener(new FlabbyBird());
         frame.add(canvas);
-        frame.setSize(width, height);
+        frame.setSize(1280, 720);
         final Animator animator = new Animator(canvas);
         frame.addWindowListener(new WindowAdapter() {
 
@@ -63,7 +59,6 @@ public class FlabbyBird implements GLEventListener, KeyListener {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         animator.start();
-
     }
 
     public void init(GLAutoDrawable drawable) {
@@ -75,7 +70,11 @@ public class FlabbyBird implements GLEventListener, KeyListener {
 
         // Enable VSync
         gl.setSwapInterval(1);
-
+        
+        //remove black background
+        gl.glEnable(GL.GL_BLEND);
+        gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
+        
         // Setup the drawing area and shading mode
         gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         gl.glShadeModel(GL.GL_SMOOTH); // try setting this to GL_FLAT and see what happens.
@@ -101,19 +100,23 @@ public class FlabbyBird implements GLEventListener, KeyListener {
         //define GL drawable
         GL gl = drawable.getGL();
         gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
-        
+
         // draw the background
         gl.glLoadIdentity();
         gl.glPushMatrix();
         bg.draw(gl);
         gl.glPopMatrix();
-        
+
         //draw the pipes
         gl.glLoadIdentity();
         gl.glPushMatrix();
-        pipe.draw(gl);
+        for (int i = 0; i < pipe.length; i++) {
+            pipe[i].draw(gl);
+            Colosion(bird, pipe[i]);//coloied function
+        }
+
         gl.glPopMatrix();
-        
+
         // draw the bird
         gl.glLoadIdentity();
         gl.glPushMatrix();
@@ -121,9 +124,6 @@ public class FlabbyBird implements GLEventListener, KeyListener {
         bird.draw(gl);
         delta = bird.getDelta();
         gl.glPopMatrix();
-        
-        //coloied function
-        Colosion(bird, pipe);
 
     }
 
@@ -131,7 +131,12 @@ public class FlabbyBird implements GLEventListener, KeyListener {
     }
 
     @Override
-    public void keyPressed(KeyEvent ke) {// space key pressed function 
+    public void keyTyped(KeyEvent ke) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent ke) {
         if (ke.getKeyCode() == KeyEvent.VK_SPACE && bird.die == false) {// if pressed jump and rotate
             delta = delta + 0.06f;
             rot = g + 45;
@@ -140,28 +145,25 @@ public class FlabbyBird implements GLEventListener, KeyListener {
     }
 
     @Override
-    public void keyTyped(KeyEvent ke) {
-    }
-
-    @Override
     public void keyReleased(KeyEvent ke) {
+
     }
 
     public void Colosion(bird bird, pipe pipe) {// colosion function
-        
+
         //define the top ,bottom,right,left of pipe and bird 
-        float bTop = bird.y + bird.delta +bird.size;
-        float bBottom = bird.y +bird.delta -bird.size;
+        float bTop = bird.y + bird.delta + bird.size;
+        float bBottom = bird.y + bird.delta - bird.size;
         float bRight = bird.x + bird.size;
         float pTop = pipe.y;
         float pBottom = pipe.y + pipe.gap;
         float pLeft = pipe.x;
-        float pRight=pipe.x+0.1f;
+        float pRight = pipe.x + 0.15f;
         //if statement check if its colied or not
-        if (bTop > pBottom && bRight > pLeft && bRight<pRight) {
+        if (bTop > pBottom && bRight > pLeft && bRight < pRight) {
             bird.die = true;
-        } else if (bBottom<pTop && bRight>pLeft && bRight<pRight) {
-            bird.die=true;
+        } else if (bBottom < pTop && bRight > pLeft && bRight < pRight) {
+            bird.die = true;
         }
     }
 }

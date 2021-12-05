@@ -8,10 +8,6 @@ import javax.media.opengl.GL;
 import static org.yourorghere.FlabbyBird.g;
 import static org.yourorghere.FlabbyBird.rot;
 
-/**
- *
- * @author TFgam
- */
 public class bird {
 
     float x;
@@ -99,20 +95,20 @@ public class bird {
             this.delta = this.delta - 0.002f;
             gl.glTranslatef(0f, delta, 0f);
         }
-        
+
         rotate(gl);//rotate the bird
-        
+
         init(gl);
-        
+
         gl.glBegin(GL.GL_QUADS);
         gl.glTexCoord2d(1, 0.15);
-        gl.glVertex2d(x + size, y + size);
+        gl.glVertex2d(x + size+(size/4f), y + size);
         gl.glTexCoord2d(0, 0.15);
-        gl.glVertex2d(x - size, y + size);
+        gl.glVertex2d(x - size-(size/4f), y + size);
         gl.glTexCoord2d(0, 0.85);
-        gl.glVertex2d(x - size, y - size);
+        gl.glVertex2d(x - size-(size/4f), y - size);
         gl.glTexCoord2d(1, 0.85);
-        gl.glVertex2d(x + size, y - size);
+        gl.glVertex2d(x + size+(size/4f), y - size);
         gl.glEnd();
         gl.glFlush();
     }
