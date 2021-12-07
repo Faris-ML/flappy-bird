@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import javax.media.opengl.GL;
 import java.util.Random;
+import static org.yourorghere.FlabbyBird.faster;
 
 public class pipe {
 
@@ -13,6 +14,7 @@ public class pipe {
     float y;
     float gap;
     Random random = new Random();
+    int counter=0;
 
     public pipe(float x, float gap) {
         this.x = x;
@@ -26,6 +28,22 @@ public class pipe {
         float fx = random.nextFloat();
         float resault = (max - min) * fx + min;
         return resault;
+    }
+
+    public float getX() {
+        return x;
+    }
+
+    public void setX(float x) {
+        this.x = x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    public void setY(float y) {
+        this.y = y;
     }
 
     public static void init(GL gl) {
@@ -47,7 +65,11 @@ public class pipe {
             this.y = rand(random, this.gap);
         }
         if (!FlabbyBird.bird.die) { //keep moving from left to right
-            this.x = this.x - 0.003f;
+            this.x = this.x - faster;
+            faster= faster + 0.0000003f;
+        }
+        if(this.x <= -0.15+faster && !FlabbyBird.bird.die && this.x >= -0.15){
+            counter++;
         }
         //draw the bottom pipe
         init(gl);

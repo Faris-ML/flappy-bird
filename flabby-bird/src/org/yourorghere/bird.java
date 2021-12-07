@@ -15,6 +15,7 @@ public class bird {
     float size;
     float delta = 0;
     boolean die = false;
+    boolean finish = false;
 
     public bird(float x, float y, float size) {
         this.x = x;
@@ -88,6 +89,7 @@ public class bird {
         if (this.die) {// if the bird die fall faster
             if (this.delta <= -1) {//dont continue falling to infite
                 this.delta = -1;
+                this.finish = true;
             }
             gl.glTranslatef(0f, delta, 0f);
             this.delta = this.delta - 0.02f;
@@ -111,6 +113,14 @@ public class bird {
         gl.glVertex2d(x + size+(size/4f), y - size);
         gl.glEnd();
         gl.glFlush();
+    }
+
+    public void setDie(boolean die) {
+        this.die = die;
+    }
+
+    public void setFinish(boolean finish) {
+        this.finish = finish;
     }
 
 }

@@ -1,6 +1,8 @@
 package org.yourorghere;
 
 import com.sun.opengl.util.Animator;
+import com.sun.opengl.util.j2d.TextRenderer;
+import java.awt.Color;
 import java.awt.Frame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -28,6 +30,10 @@ public class FlabbyBird implements GLEventListener, KeyListener {
     static pipe pipe4 = new pipe(1f + (3f * a), 0.3f);
     static pipe pipe[] = {pipe1, pipe2, pipe3, pipe4};
     static background bg = new background();
+    static int view;
+    static TextRenderer t;
+    static boolean test = false;
+    static float faster=0.003f;
 
     //static input listener=new input();
     public static void main(String[] args) {
@@ -70,11 +76,11 @@ public class FlabbyBird implements GLEventListener, KeyListener {
 
         // Enable VSync
         gl.setSwapInterval(1);
-        
+
         //remove black background
         gl.glEnable(GL.GL_BLEND);
         gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
-        
+
         // Setup the drawing area and shading mode
         gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         gl.glShadeModel(GL.GL_SMOOTH); // try setting this to GL_FLAT and see what happens.
@@ -99,32 +105,77 @@ public class FlabbyBird implements GLEventListener, KeyListener {
     public void display(GLAutoDrawable drawable) {
         //define GL drawable
         GL gl = drawable.getGL();
-        gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
+        gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);    
 
-        // draw the background
-        gl.glLoadIdentity();
-        gl.glPushMatrix();
-        bg.draw(gl);
-        gl.glPopMatrix();
-
-        //draw the pipes
-        gl.glLoadIdentity();
-        gl.glPushMatrix();
-        for (int i = 0; i < pipe.length; i++) {
-            pipe[i].draw(gl);
-            Colosion(bird, pipe[i]);//coloied function
+        if (bird.finish) {
+            view = 2;
         }
 
-        gl.glPopMatrix();
+        if (view == 0) {
+            startScreen(drawable);
+        }
+        if (view == 1) {
+            
+            t.setColor(Color.WHITE);
+            // draw the background
+            gl.glLoadIdentity();
+            gl.glPushMatrix();
+            bg.draw(gl);
+            gl.glPopMatrix();
 
-        // draw the bird
-        gl.glLoadIdentity();
-        gl.glPushMatrix();
-        bird.setDelta(delta);
-        bird.draw(gl);
-        delta = bird.getDelta();
-        gl.glPopMatrix();
+            //draw the pipes
+            gl.glLoadIdentity();
+            gl.glPushMatrix();
+            for (int i = 0; i < pipe.length; i++) {
+                pipe[i].draw(gl);
+                Colosion(bird, pipe[i]);//coloied function
+            }
 
+            gl.glPopMatrix();
+
+            // draw the bird
+            gl.glLoadIdentity();
+            gl.glPushMatrix();
+            bird.setDelta(delta);
+            bird.draw(gl);
+            delta = bird.getDelta();
+            gl.glPopMatrix();
+        }
+        if (view == 2) {
+            endScreen(drawable);
+        }
+
+    }
+
+    public void startScreen(GLAutoDrawable drawable) {
+        String start = "Welcome to Flabby Bird";
+        text(drawable, start, 330, 400, 50);
+        String enter = "press Enter to start...";
+        text(drawable, enter, 520, 320, 20);
+        String controls = "Controls:";
+        text(drawable, controls, 16, 70, 15);
+        String controls1 = "Spacebar to jump-up";
+        text(drawable, controls1, 16, 55, 15);
+    }
+
+    public void endScreen(GLAutoDrawable drawable) {
+        String start = "Game Over";
+        text(drawable,start, 350, 500, 50);
+        int count = pipe1.counter+pipe2.counter+pipe3.counter+pipe4.counter;
+        String Congratulations = "Thank you for playing, Your score: "+count;
+        text(drawable,Congratulations, 180, 400, 50);
+        String enter = "press P to play Again...";
+        text(drawable,enter, 390, 270, 20);
+        String close = "press Esc to close...";
+        text(drawable,close, 390, 230, 20);
+    }
+
+    public void text(GLAutoDrawable drawable, String s, int x, int y, int size) {
+        t = new TextRenderer(new java.awt.Font("Verdana", java.awt.Font.BOLD, size));
+        t.setColor(Color.BLACK);
+        t.beginRendering(drawable.getWidth(), drawable.getHeight());
+        t.draw(s, x, y);
+        t.endRendering();
     }
 
     public void displayChanged(GLAutoDrawable drawable, boolean modeChanged, boolean deviceChanged) {
@@ -141,7 +192,22 @@ public class FlabbyBird implements GLEventListener, KeyListener {
             delta = delta + 0.06f;
             rot = g + 45;
             g = 2;
+        } else if (ke.getKeyCode() == KeyEvent.VK_ENTER) {// if pressed jump and rotate
+            view = 1;
+        } else if (ke.getKeyCode() == KeyEvent.VK_P && bird.finish == true) {// if pressed jump and rotate
+            view = 1;
+            bird.setDie(false);;
+            delta=0;
+            bird.setFinish(false);
+            for (int i = 0; i < pipe.length; i++) {
+               pipe[i].setX(1+(float)i*a);
+               pipe[i].counter=0;
+            }
+
+        } else if (ke.getKeyCode() == KeyEvent.VK_ESCAPE && bird.finish == true) {// if pressed jump and rotate
+            System.exit(0);
         }
+
     }
 
     @Override
